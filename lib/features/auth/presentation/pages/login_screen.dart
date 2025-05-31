@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               constraints: const BoxConstraints(maxWidth: 400),
               child: Card(
                 elevation: 8,
-                shadowColor: colorScheme.shadow.withOpacity(0.3),
+                shadowColor: colorScheme.shadow.withValues(alpha: 0.3),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
         filled: true,
         fillColor: Theme.of(
           context,
-        ).colorScheme.surfaceVariant.withOpacity(0.3),
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
       ),
       validator: InputValidator.validateEmail,
     );
@@ -174,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
         filled: true,
         fillColor: Theme.of(
           context,
-        ).colorScheme.surfaceVariant.withOpacity(0.3),
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
       ),
       validator: InputValidator.validatePassword,
     );
@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: colorScheme.outline),
-            color: colorScheme.surfaceVariant.withOpacity(0.3),
+            color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -213,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: roleOption.color.withOpacity(0.1),
+                              color: roleOption.color.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Icon(

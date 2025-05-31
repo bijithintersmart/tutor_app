@@ -237,7 +237,7 @@ class DashboardHome extends StatelessWidget {
                         ),
                         Chip(
                           label: Text(nextBooking.subject),
-                          backgroundColor: Colors.white.withOpacity(0.2),
+                          backgroundColor: Colors.white.withValues(alpha: 0.2),
                           labelStyle: const TextStyle(color: Colors.white),
                         ),
                       ],
@@ -296,7 +296,9 @@ class DashboardHome extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       'Enjoy your free time!',
-                      style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
                     ),
                   ],
                 ),

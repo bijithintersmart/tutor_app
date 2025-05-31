@@ -35,7 +35,9 @@ class CustomDrawer extends StatelessWidget {
             accountEmail: Text(
               userEmail,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.8),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onPrimary.withValues(alpha: 0.8),
               ),
             ),
             currentAccountPicture: CircleAvatar(

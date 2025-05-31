@@ -35,7 +35,7 @@ class ManagerLeaveRequestCard extends StatelessWidget {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: statusColor.withOpacity(0.2),
+                  backgroundColor: statusColor.withValues(alpha: 0.2),
                   child: Text(
                     request.teacherName.substring(0, 1),
                     style: TextStyle(
@@ -65,7 +65,7 @@ class ManagerLeaveRequestCard extends StatelessWidget {
                 ),
                 Chip(
                   label: Text(request.status),
-                  backgroundColor: statusColor.withOpacity(0.2),
+                  backgroundColor: statusColor.withValues(alpha: 0.2),
                   labelStyle: TextStyle(color: statusColor),
                 ),
               ],
