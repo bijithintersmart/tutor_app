@@ -345,10 +345,12 @@ void showReviewDialog(BuildContext context, CompletedSession session) {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: getQualityColor(quality).withOpacity(0.2),
+                        color: getQualityColor(quality).withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: getQualityColor(quality).withOpacity(0.5),
+                          color: getQualityColor(
+                            quality,
+                          ).withValues(alpha: 0.5),
                           width: 1,
                         ),
                       ),

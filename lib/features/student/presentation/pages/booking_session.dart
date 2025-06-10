@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BookSessionScreen extends StatelessWidget {
-  const BookSessionScreen({Key? key}) : super(key: key);
+  const BookSessionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +33,8 @@ class CategoryFilterWidget extends StatelessWidget {
     'Programming',
   ];
 
+  CategoryFilterWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -63,6 +65,8 @@ class CategoryFilterWidget extends StatelessWidget {
 }
 
 class SearchBarWidget extends StatelessWidget {
+  const SearchBarWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,6 +123,8 @@ class FeaturedTeachersWidget extends StatelessWidget {
     },
   ];
 
+   FeaturedTeachersWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -160,16 +166,16 @@ class TeacherCard extends StatelessWidget {
   final String imageUrl;
 
   const TeacherCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.subject,
     required this.rating,
     required this.imageUrl,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 160,
       child: Card(
         child: Column(
@@ -259,6 +265,8 @@ class PopularClassesWidget extends StatelessWidget {
     },
   ];
 
+   PopularClassesWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -315,14 +323,14 @@ class ClassCard extends StatelessWidget {
   final String seats;
 
   const ClassCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.teacher,
     required this.description,
     required this.imageUrl,
     required this.time,
     required this.seats,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -390,7 +398,7 @@ class ClassCard extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.orange.withOpacity(0.2),
+                        color: Colors.orange.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(

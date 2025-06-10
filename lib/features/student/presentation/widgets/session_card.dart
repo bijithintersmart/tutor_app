@@ -16,7 +16,9 @@ class SessionCard extends StatelessWidget {
           Container(
             color:
                 session.isLive
-                    ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                    ? Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.1)
                     : null,
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -28,7 +30,7 @@ class SessionCard extends StatelessWidget {
                       backgroundImage: NetworkImage(session.teacherImage),
                       backgroundColor: Theme.of(
                         context,
-                      ).colorScheme.primary.withOpacity(0.2),
+                      ).colorScheme.primary.withValues(alpha: 0.2),
                       radius: 24,
                     ),
                     const SizedBox(width: 12),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +23,8 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class ProfileHeaderWidget extends StatelessWidget {
+  const ProfileHeaderWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,8 +90,7 @@ class StatCard extends StatelessWidget {
   final String value;
   final String label;
 
-  const StatCard({Key? key, required this.value, required this.label})
-    : super(key: key);
+  const StatCard({super.key, required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +147,8 @@ class AccountSettingsWidget extends StatelessWidget {
     },
   ];
 
+   AccountSettingsWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -184,12 +187,12 @@ class SettingsCard extends StatelessWidget {
   final bool isLogout;
 
   const SettingsCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.icon,
     this.isLogout = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -201,8 +204,10 @@ class SettingsCard extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 isLogout
-                    ? Colors.red.withOpacity(0.1)
-                    : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    ? Colors.red.withValues(alpha: 0.1)
+                    : Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(

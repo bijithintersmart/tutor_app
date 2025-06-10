@@ -32,7 +32,7 @@ class CompleteSessionWidget extends StatelessWidget {
                       backgroundImage: NetworkImage(session.teacherImage),
                       backgroundColor: Theme.of(
                         context,
-                      ).colorScheme.primary.withOpacity(0.2),
+                      ).colorScheme.primary.withValues(alpha: 0.2),
                       radius: 24,
                     ),
                     const SizedBox(width: 12),
@@ -117,7 +117,7 @@ class CompleteSessionWidget extends StatelessWidget {
                                       colors: [
                                         getCompletionColor(
                                           completionPercent,
-                                        ).withOpacity(0.7),
+                                        ).withValues(alpha: 0.7),
                                         getCompletionColor(completionPercent),
                                       ],
                                     ),

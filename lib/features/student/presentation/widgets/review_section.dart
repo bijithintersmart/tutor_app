@@ -26,7 +26,9 @@ class ReviewSection extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: getQualityColor(session.quality).withOpacity(0.2),
+                  color: getQualityColor(
+                    session.quality,
+                  ).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
