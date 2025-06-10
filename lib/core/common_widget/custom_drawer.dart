@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_app/core/common_widget/info_screen.dart';
+import 'package:tutor_app/features/auth/data/models/user.dart';
 import 'package:tutor_app/features/manager/presentation/pages/manager_screen.dart';
 import 'package:tutor_app/features/teacher/presentation/pages/teacher_leave_request.dart';
-import 'package:tutor_app/features/teacher/presentation/pages/teacher_profile.dart';
 
 class CustomDrawer extends StatelessWidget {
   final String userName;
   final String userEmail;
+  final UserRole? role;
 
   const CustomDrawer({
     super.key,
     required this.userName,
     required this.userEmail,
+    this.role,
   });
 
+  // Widget get profile => role == UserRole.teacher? TeacherProfileScreen(teacher: Teacher(id: id, name: name, email: email, subjects: subjects, availability: availability), selectedDate: selectedDate):role ==UserRole.manager? ManagerProfile():StudentAssignment();
   @override
   Widget build(BuildContext context) {
     final initials =
@@ -112,7 +115,7 @@ class CustomDrawer extends StatelessWidget {
                     //   context,
                     //   MaterialPageRoute(
                     //     builder: (context) =>  TeacherProfileScreen(),
-                      // ),
+                    //   ),
                     // );
                   },
                 ),

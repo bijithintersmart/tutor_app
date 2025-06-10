@@ -2,8 +2,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
-import 'package:tutor_app/features/manager/presentation/pages/manager_screen.dart';
-import 'package:tutor_app/features/teacher/presentation/pages/teacher_dashboard.dart';
 
 import '../../features/features.dart';
 
@@ -23,7 +21,7 @@ class AppRouter {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const TeacherDashboard(),
+        builder: (context, state) => const LoginScreen(),
       ),
 
       // Manager Routes
