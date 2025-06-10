@@ -2,8 +2,12 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
+import 'package:tutor_app/features/auth/presentation/pages/signup_screen.dart';
+import 'package:tutor_app/features/student/presentation/pages/student_home.dart';
 
 import '../../features/features.dart';
+import '../../features/manager/presentation/pages/manager_screen.dart';
+import '../../features/teacher/presentation/pages/teacher_dashboard.dart';
 
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -23,6 +27,11 @@ class AppRouter {
         name: 'login',
         builder: (context, state) => const LoginScreen(),
       ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) => const SignupScreen(),
+      ),
 
       // Manager Routes
       GoRoute(
@@ -35,11 +44,11 @@ class AppRouter {
           return null;
         },
         routes: [
-          // GoRoute(
-          //   path: '/dashboard',
-          //   name: 'manager-dashboard',
-          //   builder: (context, state) => const ManagerDashboard(),
-          // ),
+          GoRoute(
+            path: '/dashboard',
+            name: 'manager-dashboard',
+            builder: (context, state) => const ManagerDashboard(),
+          ),
           // GoRoute(
           //   path: '/teacher-profile',
           //   name: 'manager-teacher-profile',
@@ -64,11 +73,11 @@ class AppRouter {
           return null;
         },
         routes: [
-          // GoRoute(
-          //   path: '/dashboard',
-          //   name: 'teacher-dashboard',
-          //   builder: (context, state) => const TeacherDashboard(),
-          // ),
+          GoRoute(
+            path: '/dashboard',
+            name: 'teacher-dashboard',
+            builder: (context, state) => const TeacherDashboard(),
+          ),
         ],
       ),
 
@@ -83,11 +92,11 @@ class AppRouter {
           return null;
         },
         routes: [
-          // GoRoute(
-          //   path: '/dashboard',
-          //   name: 'student-dashboard',
-          //   builder: (context, state) => const MainScreen(),
-          // ),
+          GoRoute(
+            path: '/dashboard',
+            name: 'student-dashboard',
+            builder: (context, state) => const StudentHomeScreen(),
+          ),
         ],
       ),
 
@@ -108,19 +117,20 @@ class AppRouter {
     final isLoggedIn = Supabase.instance.client.auth.currentUser != null;
     final isLoggingIn = state.matchedLocation == '/login';
     final isSplash = state.matchedLocation == '/splash';
+    final isRegister = state.matchedLocation == '/register';
 
     // Show splash screen while checking authentication
-    if (!isLoggedIn && !isLoggingIn && !isSplash) {
+    if (!isLoggedIn && !isLoggingIn && !isSplash && !isRegister) {
       return '/splash';
     }
 
-    // If logged in and trying to access login, redirect to appropriate dashboard
-    if (isLoggedIn && isLoggingIn) {
+    // If logged in and trying to access login or register, redirect to appropriate dashboard
+    if (isLoggedIn && (isLoggingIn || isRegister)) {
       return getRedirectPathForUser();
     }
 
     // If not logged in and trying to access protected routes, redirect to login
-    if (!isLoggedIn && !isLoggingIn && !isSplash) {
+    if (!isLoggedIn && !isLoggingIn && !isSplash && !isRegister) {
       return '/login';
     }
 

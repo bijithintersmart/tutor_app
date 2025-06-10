@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:tutor_app/core/contants/strings.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
 import 'package:tutor_app/core/routes/app_router.dart';
 import 'package:tutor_app/features/auth/data/models/user.dart';
@@ -21,7 +22,7 @@ class TutorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Teacher-Manager App',
+      title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

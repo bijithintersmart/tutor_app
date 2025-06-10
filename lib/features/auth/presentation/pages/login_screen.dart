@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tutor_app/core/contants/strings.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
 import 'package:tutor_app/core/utils/validator.dart';
 import 'package:tutor_app/features/auth/data/models/user.dart';
@@ -11,14 +13,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  String _selectedRole = UserRole.manager.label;
-  bool _isPasswordVisible = false;
+  final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-
+  bool _isPasswordVisible = false;
+  final _passwordController = TextEditingController();
+  String _selectedRole = UserRole.manager.label;
   // User role options with icons
   final List<UserRoleOption> _userRoles = [
     UserRoleOption(
@@ -48,56 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Card(
-                elevation: 8,
-                shadowColor: colorScheme.shadow.withValues(alpha: 0.3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildHeader(colorScheme),
-                        const SizedBox(height: 40),
-                        _buildEmailField(),
-                        const SizedBox(height: 20),
-                        _buildPasswordField(),
-                        const SizedBox(height: 24),
-                        _buildRoleDropdown(colorScheme),
-                        const SizedBox(height: 32),
-                        _buildLoginButton(colorScheme),
-                        const SizedBox(height: 16),
-                        _buildForgotPasswordLink(colorScheme),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildHeader(ColorScheme colorScheme) {
     return Column(
       children: [
@@ -123,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Teacher-Manager App',
+          AppConstants.appName,
           style: Theme.of(
             context,
           ).textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
@@ -295,6 +245,31 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget _buildRegisterLink(ColorScheme colorScheme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Don\'t have an account? ',
+          style: TextStyle(color: colorScheme.onSurfaceVariant),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+          onPressed: () {
+            GoRouter.of(context).go('/register');
+          },
+          child: Text(
+            'Sign In',
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -335,19 +310,71 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Card(
+                elevation: 8,
+                shadowColor: colorScheme.shadow.withValues(alpha: 0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildHeader(colorScheme),
+                        const SizedBox(height: 40),
+                        _buildEmailField(),
+                        const SizedBox(height: 20),
+                        _buildPasswordField(),
+                        const SizedBox(height: 24),
+                        _buildRoleDropdown(colorScheme),
+                        const SizedBox(height: 32),
+                        _buildLoginButton(colorScheme),
+                        const SizedBox(height: 16),
+                        _buildForgotPasswordLink(colorScheme),
+                        const SizedBox(height: 16),
+                        _buildRegisterLink(colorScheme),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 // Helper class for user role options
 class UserRoleOption {
-  final String role;
-  final String displayName;
-  final IconData icon;
-  final Color color;
-
   UserRoleOption({
     required this.role,
     required this.displayName,
     required this.icon,
     required this.color,
   });
+
+  final Color color;
+  final String displayName;
+  final IconData icon;
+  final String role;
 }
