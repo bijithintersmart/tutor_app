@@ -75,6 +75,7 @@ class _ManagerHomeState extends State<ManagerHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: CustomAppBar(
         title: 'Manager Dashboard',
         profileName: 'David Wilson',

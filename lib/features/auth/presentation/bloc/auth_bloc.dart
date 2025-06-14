@@ -43,7 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
-      final role = UserRoleExtension.fromString(result['role']);
+      final role = UserTypeExtension.fromString(result['role']);
       emit(AuthState.authenticated(role));
     } catch (e) {
       emit(AuthState.unauthenticated(e.toString()));

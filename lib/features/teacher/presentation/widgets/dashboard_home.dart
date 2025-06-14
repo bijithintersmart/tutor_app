@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_app/core/common_widget/custom_appbar.dart';
+import 'package:tutor_app/core/common_widget/custom_drawer.dart';
 import 'package:tutor_app/features/student/data/models/booking_model.dart';
 import 'package:tutor_app/features/teacher/data/models/leave_request.dart';
 import 'package:tutor_app/features/teacher/presentation/widgets/booking_card.dart';
 import 'package:tutor_app/features/teacher/presentation/widgets/leave_request_card.dart';
 import 'package:tutor_app/features/teacher/presentation/widgets/action_card.dart';
 
-class DashboardHome extends StatelessWidget {
-  final List<Booking> bookings;
-  final List<LeaveRequest> pendingLeaveRequests;
-  final ValueChanged<int> onNavigateToTab;
-
+class DashboardHome extends StatefulWidget {
   const DashboardHome({
     super.key,
     required this.bookings,
@@ -18,187 +15,16 @@ class DashboardHome extends StatelessWidget {
     required this.onNavigateToTab,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    final today = DateTime.now();
-    final todayBookings =
-        bookings
-            .where(
-              (booking) =>
-                  booking.date.day == today.day &&
-                  booking.date.month == today.month &&
-                  booking.date.year == today.year,
-            )
-            .toList();
-    final nextBooking =
-        bookings.isNotEmpty &&
-                bookings.any(
-                  (booking) =>
-                      booking.date.isAfter(today) ||
-                      (booking.date.day == today.day &&
-                          booking.date.month == today.month &&
-                          booking.date.year == today.year &&
-                          booking.startTime.hour >= TimeOfDay.now().hour),
-                )
-            ? bookings.firstWhere(
-              (booking) =>
-                  booking.date.isAfter(today) ||
-                  (booking.date.day == today.day &&
-                      booking.date.month == today.month &&
-                      booking.date.year == today.year &&
-                      booking.startTime.hour >= TimeOfDay.now().hour),
-            )
-            : null;
+  final List<Booking> bookings;
+  final ValueChanged<int> onNavigateToTab;
+  final List<LeaveRequest> pendingLeaveRequests;
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Dashboard',
-        profileName: 'Jane Smith',
-        leadingIcon: Icons.menu,
-        onLeadingPressed: () {
-          // Open drawer or perform action
-        },
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Handle notifications
-            },
-            tooltip: 'Notifications',
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome back,',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            Text(
-              'Emma Rodriguez',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-            _buildNextSessionCard(context, nextBooking),
-            if (pendingLeaveRequests.isNotEmpty) ...[
-              const SizedBox(height: 24),
-              Text(
-                'Pending Leave Requests',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount:
-                    pendingLeaveRequests.length > 2
-                        ? 2
-                        : pendingLeaveRequests.length,
-                itemBuilder: (context, index) {
-                  return LeaveRequestCard(
-                    request: pendingLeaveRequests[index],
-                    onCancel: () {},
-                  );
-                },
-              ),
-              if (pendingLeaveRequests.length > 2)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextButton(
-                    onPressed: () => onNavigateToTab(3),
-                    child: Text(
-                      'View all ${pendingLeaveRequests.length} pending requests',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-            const SizedBox(height: 24),
-            Text(
-              'Today\'s Schedule',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            todayBookings.isEmpty
-                ? _buildEmptySchedule(context)
-                : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: todayBookings.length,
-                  itemBuilder: (context, index) {
-                    return BookingCard(
-                      booking: todayBookings[index],
-                      isUpcoming:
-                          todayBookings[index].startTime.hour >=
-                          TimeOfDay.now().hour,
-                    );
-                  },
-                ),
-            const SizedBox(height: 24),
-            Text(
-              'Quick Actions',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ActionCard(
-                    icon: Icons.add_circle,
-                    title: 'Add Availability',
-                    onTap: () => onNavigateToTab(2),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ActionCard(
-                    icon: Icons.schedule,
-                    title: 'View Schedule',
-                    onTap: () => onNavigateToTab(1),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ActionCard(
-                    icon: Icons.timer,
-                    title: 'Request Leave',
-                    onTap: () => onNavigateToTab(3),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ActionCard(
-                    icon: Icons.person,
-                    title: 'Edit Profile',
-                    onTap: () => onNavigateToTab(4),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  @override
+  State<DashboardHome> createState() => _DashboardHomeState();
+}
+
+class _DashboardHomeState extends State<DashboardHome> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget _buildNextSessionCard(BuildContext context, Booking? nextBooking) {
     return Card(
@@ -351,6 +177,194 @@ class DashboardHome extends StatelessWidget {
           ).textTheme.bodyLarge?.copyWith(color: Colors.white),
         ),
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final today = DateTime.now();
+    final todayBookings =
+        widget.bookings
+            .where(
+              (booking) =>
+                  booking.date.day == today.day &&
+                  booking.date.month == today.month &&
+                  booking.date.year == today.year,
+            )
+            .toList();
+    final nextBooking =
+        widget.bookings.isNotEmpty &&
+                widget.bookings.any(
+                  (booking) =>
+                      booking.date.isAfter(today) ||
+                      (booking.date.day == today.day &&
+                          booking.date.month == today.month &&
+                          booking.date.year == today.year &&
+                          booking.startTime.hour >= TimeOfDay.now().hour),
+                )
+            ? widget.bookings.firstWhere(
+              (booking) =>
+                  booking.date.isAfter(today) ||
+                  (booking.date.day == today.day &&
+                      booking.date.month == today.month &&
+                      booking.date.year == today.year &&
+                      booking.startTime.hour >= TimeOfDay.now().hour),
+            )
+            : null;
+
+    return Scaffold(
+      key: scaffoldKey,
+      appBar: CustomAppBar(
+        title: 'Dashboard',
+        profileName: 'Jane Smith',
+        leadingIcon: Icons.menu,
+        scaffoldKey: scaffoldKey,
+        onLeadingPressed: () {
+          // Open drawer or perform action
+        },
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {
+              // Handle notifications
+            },
+            tooltip: 'Notifications',
+          ),
+        ],
+      ),
+      drawer: const CustomDrawer(
+        userName: 'David Wilson',
+        userEmail: 'david.w@school.edu',
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome back,',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            Text(
+              'Emma Rodriguez',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 24),
+            _buildNextSessionCard(context, nextBooking),
+            if (widget.pendingLeaveRequests.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              Text(
+                'Pending Leave Requests',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount:
+                    widget.pendingLeaveRequests.length > 2
+                        ? 2
+                        : widget.pendingLeaveRequests.length,
+                itemBuilder: (context, index) {
+                  return LeaveRequestCard(
+                    request: widget.pendingLeaveRequests[index],
+                    onCancel: () {},
+                  );
+                },
+              ),
+              if (widget.pendingLeaveRequests.length > 2)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextButton(
+                    onPressed: () => widget.onNavigateToTab(3),
+                    child: Text(
+                      'View all ${widget.pendingLeaveRequests.length} pending requests',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+            const SizedBox(height: 24),
+            Text(
+              'Today\'s Schedule',
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            todayBookings.isEmpty
+                ? _buildEmptySchedule(context)
+                : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: todayBookings.length,
+                  itemBuilder: (context, index) {
+                    return BookingCard(
+                      booking: todayBookings[index],
+                      isUpcoming:
+                          todayBookings[index].startTime.hour >=
+                          TimeOfDay.now().hour,
+                    );
+                  },
+                ),
+            const SizedBox(height: 24),
+            Text(
+              'Quick Actions',
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: ActionCard(
+                    icon: Icons.add_circle,
+                    title: 'Add Availability',
+                    onTap: () => widget.onNavigateToTab(2),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ActionCard(
+                    icon: Icons.schedule,
+                    title: 'View Schedule',
+                    onTap: () => widget.onNavigateToTab(1),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: ActionCard(
+                    icon: Icons.timer,
+                    title: 'Request Leave',
+                    onTap: () => widget.onNavigateToTab(3),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ActionCard(
+                    icon: Icons.person,
+                    title: 'Edit Profile',
+                    onTap: () => widget.onNavigateToTab(4),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

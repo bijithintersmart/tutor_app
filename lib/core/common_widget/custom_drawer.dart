@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_app/core/common_widget/info_screen.dart';
+import 'package:tutor_app/core/db/supabase_client.dart';
 import 'package:tutor_app/features/auth/data/models/user.dart';
 import 'package:tutor_app/features/manager/presentation/pages/manager_screen.dart';
 import 'package:tutor_app/features/teacher/presentation/pages/teacher_leave_request.dart';
 
-class CustomDrawer extends StatelessWidget {
+import 'made_with_flutter.dart';
+
+class CustomDrawer extends StatefulWidget {
   final String userName;
   final String userEmail;
-  final UserRole? role;
+  final UserType? role;
 
   const CustomDrawer({
     super.key,
@@ -16,27 +19,36 @@ class CustomDrawer extends StatelessWidget {
     this.role,
   });
 
-  // Widget get profile => role == UserRole.teacher? TeacherProfileScreen(teacher: Teacher(id: id, name: name, email: email, subjects: subjects, availability: availability), selectedDate: selectedDate):role ==UserRole.manager? ManagerProfile():StudentAssignment();
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  final client = SupabaseClientService();
+
+  // Widget get profile => role == UserType.teacher? TeacherProfileScreen(teacher: Teacher(id: id, name: name, email: email, subjects: subjects, availability: availability), selectedDate: selectedDate):role ==UserType.manager? ManagerProfile():StudentAssignment();
   @override
   Widget build(BuildContext context) {
     final initials =
-        userName.isNotEmpty
-            ? userName.split(' ').map((e) => e[0]).take(2).join()
+        widget.userName.isNotEmpty
+            ? widget.userName.split(' ').map((e) => e[0]).take(2).join()
             : 'U';
+    // final user = client.currentUser;
 
     return Drawer(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: Column(
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-              userName,
+              widget.userName,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
             accountEmail: Text(
-              userEmail,
+              widget.userEmail,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(
                   context,
@@ -59,6 +71,7 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           Expanded(
+            flex: 3,
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
@@ -186,26 +199,24 @@ class CustomDrawer extends StatelessWidget {
                 ListTile(
                   leading: Icon(
                     Icons.logout,
-                    color: Theme.of(context).colorScheme.error,
+                    color: Colors.red,
                   ),
                   title: Text(
                     'Logout',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
+                      color: Colors.red,
                     ),
                   ),
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pop(context);
-                    // Navigator.pushAndRemoveUntil(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
-                    //   (route) => false,
-                    // );
+                    await SupabaseClientService().signOut();
                   },
                 ),
               ],
             ),
           ),
+          Spacer(flex: 1),
+          MadeWithFlutter(),
         ],
       ),
     );

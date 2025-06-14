@@ -8,6 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final bool centerTitle;
   final double elevation;
+  final PreferredSizeWidget? bottom;
   final GlobalKey<ScaffoldState>? scaffoldKey;
 
   const CustomAppBar({
@@ -15,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     required this.profileName,
     this.leadingIcon,
+    this.bottom,
     this.onLeadingPressed,
     this.actions,
     this.centerTitle = true,
@@ -145,9 +147,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ],
+      bottom: bottom,
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize =>
+      Size.fromHeight(bottom == null ? kToolbarHeight : kToolbarHeight + 45);
 }

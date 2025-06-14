@@ -243,7 +243,7 @@ class _Authenticated implements AuthState {
   const _Authenticated(this.role);
   
 
- final  UserRole role;
+ final  UserType role;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -275,7 +275,7 @@ abstract mixin class _$AuthenticatedCopyWith<$Res> implements $AuthStateCopyWith
   factory _$AuthenticatedCopyWith(_Authenticated value, $Res Function(_Authenticated) _then) = __$AuthenticatedCopyWithImpl;
 @useResult
 $Res call({
- UserRole role
+ UserType role
 });
 
 
@@ -295,7 +295,7 @@ class __$AuthenticatedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? role = freezed,}) {
   return _then(_Authenticated(
 freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
-as UserRole,
+as UserType,
   ));
 }
 

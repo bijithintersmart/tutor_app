@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tutor_app/core/common_widget/custom_appbar.dart';
+import 'package:tutor_app/core/common_widget/custom_drawer.dart';
 import 'package:tutor_app/features/student/data/models/session.dart';
 import 'package:tutor_app/features/student/presentation/widgets/complete_session.dart';
 import 'package:tutor_app/features/student/presentation/widgets/session_card.dart';
@@ -14,7 +16,7 @@ class _StudentDashboardState extends State<StudentDashboard>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedIndex = 0;
-
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -35,24 +37,12 @@ class _StudentDashboardState extends State<StudentDashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                floating: true,
-                pinned: true,
-                title: const Text('My Sessions'),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.logout),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/login');
-                    },
-                    tooltip: 'Log out',
-                  ),
-                ],
-                bottom: TabBar(
+      key: scaffoldKey,
+      appBar: CustomAppBar(
+        title: 'My Sessions',
+        profileName: 'David Wilson',
+        scaffoldKey: scaffoldKey,
+        bottom: TabBar(
                   controller: _tabController,
                   indicatorColor: Theme.of(context).colorScheme.primary,
                   indicatorWeight: 3,
@@ -125,14 +115,14 @@ class _StudentDashboardState extends State<StudentDashboard>
                     ),
                   ],
                 ),
-              ),
-            ];
-          },
-          body: TabBarView(
-            controller: _tabController,
-            children: [_buildUpcomingSessions(), _buildPastSessions()],
-          ),
-        ),
+      ),
+      drawer: const CustomDrawer(
+        userName: 'David Wilson',
+        userEmail: 'david.w@school.edu',
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [_buildUpcomingSessions(), _buildPastSessions()],
       ),
     );
   }

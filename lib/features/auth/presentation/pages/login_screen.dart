@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tutor_app/core/contants/strings.dart';
+import 'package:tutor_app/core/constants/strings.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
 import 'package:tutor_app/core/utils/validator.dart';
 import 'package:tutor_app/features/auth/data/models/user.dart';
@@ -16,25 +16,25 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  bool _isPasswordVisible = false;
+  bool _isPasswordVisible = true;
   final _passwordController = TextEditingController();
-  String _selectedRole = UserRole.manager.label;
+  String _selectedRole = UserType.manager.label;
   // User role options with icons
-  final List<UserRoleOption> _userRoles = [
-    UserRoleOption(
-      role: UserRole.manager.label,
+  final List<UserTypeOption> _UserTypes = [
+    UserTypeOption(
+      role: UserType.manager.label,
       displayName: 'Manager',
       icon: Icons.admin_panel_settings,
       color: Colors.purple,
     ),
-    UserRoleOption(
-      role: UserRole.teacher.label,
+    UserTypeOption(
+      role: UserType.teacher.label,
       displayName: 'Teacher',
       icon: Icons.school,
       color: Colors.blue,
     ),
-    UserRoleOption(
-      role: UserRole.student.label,
+    UserTypeOption(
+      role: UserType.student.label,
       displayName: 'Student',
       icon: Icons.person,
       color: Colors.green,
@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildPasswordField() {
     return TextFormField(
       controller: _passwordController,
-      obscureText: !_isPasswordVisible,
+      obscureText: _isPasswordVisible,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
         labelText: 'Password',
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
         ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
       ),
-      validator: InputValidator.validatePassword,
+      // validator: InputValidator.validatePassword,
     );
   }
 
@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               borderRadius: BorderRadius.circular(12),
               items:
-                  _userRoles.map((roleOption) {
+                  _UserTypes.map((roleOption) {
                     return DropdownMenuItem<String>(
                       value: roleOption.role,
                       child: Row(
@@ -365,8 +365,8 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 // Helper class for user role options
-class UserRoleOption {
-  UserRoleOption({
+class UserTypeOption {
+  UserTypeOption({
     required this.role,
     required this.displayName,
     required this.icon,

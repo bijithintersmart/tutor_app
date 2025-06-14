@@ -1,91 +1,66 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stack_trace/stack_trace.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:tutor_app/core/contants/strings.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
 import 'package:tutor_app/core/routes/app_router.dart';
+import 'package:tutor_app/core/theme/app_theme.dart';
+import 'package:tutor_app/core/utils/app_error_handler.dart';
+import 'package:tutor_app/core/utils/functions.dart';
+
 import 'package:tutor_app/features/auth/data/models/user.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-   await SupabaseClientService.initialize(
-    url: dotenv.get("DB_URL", fallback: ""),
-    anonKey: dotenv.get("ANON_KEY", fallback: ""),
+  final errorHandler = AppErrorHandler();
+  runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await initializeAppConfig();
+      errorHandler.initialize();
+      runApp(const TutorApp());
+    },
+    (error, stackTrace) {
+      Chain.capture(() {
+        errorHandler.handleError(
+          error,
+          stackTrace,
+          errorType: getExceptionType(error),
+        );
+      });
+    },
   );
-  runApp(const TutorApp());
 }
 
-class TutorApp extends StatelessWidget {
+class TutorApp extends StatefulWidget {
   const TutorApp({super.key});
 
   @override
+  State<TutorApp> createState() => _TutorAppState();
+}
+
+class _TutorAppState extends State<TutorApp> {
+  @override
+  void initState() {
+    AppRouter.initialize();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: AppConstants.appName,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-        ),
-        appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
-        cardTheme: CardTheme(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            elevation: 2,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-        ),
+    return BlocProvider.value(
+      value: AppRouter.networkCubit,
+      child: MaterialApp.router(
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+        builder: (context, child) {
+          return child ?? const SizedBox();
+        },
       ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.dark,
-        ),
-        appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
-        cardTheme: CardTheme(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            elevation: 2,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-        ),
-      ),
-      themeMode: ThemeMode.system,
-      routerConfig: AppRouter.router,
     );
   }
 }
@@ -120,8 +95,9 @@ abstract class AuthAwareState<T extends AuthAwareWidget> extends State<T> {
 
   bool get isAuthenticated => _supabaseService.isAuthenticated;
 
-  UserRole get currentUserRole => _supabaseService.currentUserRole;
+  UserType get currentUserType => _supabaseService.currentUserType;
 }
+
 class BaseDashboardWidget extends AuthAwareWidget {
   final Widget child;
   final String title;

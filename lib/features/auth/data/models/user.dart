@@ -1,25 +1,25 @@
-enum UserRole { student, teacher, manager }
+enum UserType { student, teacher, manager }
 
-extension UserRoleExtension on UserRole {
-  String get label {
+extension UserTypeExtension on UserType {
+  String get value {
     switch (this) {
-      case UserRole.student:
+      case UserType.student:
         return 'Student';
-      case UserRole.teacher:
+      case UserType.teacher:
         return 'Teacher';
-      case UserRole.manager:
+      case UserType.manager:
         return 'Manager';
     }
   }
 
-  static UserRole fromString(String role) {
+  static UserType fromString(String role) {
     switch (role.toLowerCase()) {
       case 'student':
-        return UserRole.student;
+        return UserType.student;
       case 'teacher':
-        return UserRole.teacher;
+        return UserType.teacher;
       case 'manager':
-        return UserRole.manager;
+        return UserType.manager;
       default:
         throw Exception('Unknown role: $role');
     }

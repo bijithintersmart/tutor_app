@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tutor_app/core/contants/strings.dart';
+import 'package:tutor_app/core/constants/strings.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
 import 'package:tutor_app/core/utils/validator.dart';
 import 'package:tutor_app/features/auth/data/models/user.dart';
@@ -26,27 +26,27 @@ class _SignupScreenState extends State<SignupScreen> {
   final _studentIdController = TextEditingController();
   final _institutionController = TextEditingController();
 
-  String _selectedRole = UserRole.student.label;
+  String _selectedRole = UserType.student.label;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _isLoading = false;
 
   // User role options with icons
-  final List<UserRoleOption> _userRoles = [
-    UserRoleOption(
-      role: UserRole.manager.label,
+  final List<UserTypeOption> _UserTypes = [
+    UserTypeOption(
+      role: UserType.manager.label,
       displayName: 'Manager',
       icon: Icons.admin_panel_settings,
       color: Colors.purple,
     ),
-    UserRoleOption(
-      role: UserRole.teacher.label,
+    UserTypeOption(
+      role: UserType.teacher.label,
       displayName: 'Teacher',
       icon: Icons.school,
       color: Colors.blue,
     ),
-    UserRoleOption(
-      role: UserRole.student.label,
+    UserTypeOption(
+      role: UserType.student.label,
       displayName: 'Student',
       icon: Icons.person,
       color: Colors.green,
@@ -323,7 +323,7 @@ class _SignupScreenState extends State<SignupScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               borderRadius: BorderRadius.circular(12),
               items:
-                  _userRoles.map((roleOption) {
+                  _UserTypes.map((roleOption) {
                     return DropdownMenuItem<String>(
                       value: roleOption.role,
                       child: Row(
@@ -666,12 +666,12 @@ class _SignupScreenState extends State<SignupScreen> {
       }
 
       // Create account with Supabase
-      await SupabaseClientService().signUp(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-        role: UserRole.student,
-        additionalData: metadata,
-      );
+      // await SupabaseClientService().signUp(
+      //   email: _emailController.text.trim(),
+      //   password: _passwordController.text.trim(),
+      //   role: UserType.student,
+      //   additionalData: metadata,
+      // );
 
       // Show success message
       if (mounted) {
@@ -711,13 +711,13 @@ class _SignupScreenState extends State<SignupScreen> {
 }
 
 // Helper class for user role options (same as login screen)
-class UserRoleOption {
+class UserTypeOption {
   final String role;
   final String displayName;
   final IconData icon;
   final Color color;
 
-  UserRoleOption({
+  UserTypeOption({
     required this.role,
     required this.displayName,
     required this.icon,
