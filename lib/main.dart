@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:stack_trace/stack_trace.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
@@ -11,6 +13,9 @@ import 'package:tutor_app/core/utils/app_error_handler.dart';
 import 'package:tutor_app/core/utils/functions.dart';
 
 import 'package:tutor_app/features/auth/data/models/user.dart';
+import 'package:tutor_app/features/settings/presentation/bloc/settings_bloc.dart';
+
+import 'features/settings/presentation/bloc/settings_state.dart';
 
 Future<void> main() async {
   final errorHandler = AppErrorHandler();
@@ -18,6 +23,11 @@ Future<void> main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       await initializeAppConfig();
+      HydratedBloc.storage = await HydratedStorage.build(
+        storageDirectory: HydratedStorageDirectory(
+          (await getTemporaryDirectory()).path,
+        ),
+      );
       errorHandler.initialize();
       runApp(const TutorApp());
     },
@@ -49,16 +59,29 @@ class _TutorAppState extends State<TutorApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: AppRouter.networkCubit,
-      child: MaterialApp.router(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
-        debugShowCheckedModeBanner: false,
-        routerConfig: AppRouter.router,
-        builder: (context, child) {
-          return child ?? const SizedBox();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SettingsBloc>(
+          create:
+              (context) =>
+                  SettingsBloc()..add(const SettingsEvent.loadSettings()),
+        ),
+      ],
+      child: BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (context, settingsState) {
+          return BlocProvider.value(
+            value: AppRouter.networkCubit,
+            child: MaterialApp.router(
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              themeMode: settingsState.themeMode,
+              debugShowCheckedModeBanner: false,
+              routerConfig: AppRouter.router,
+              builder: (context, child) {
+                return child ?? const SizedBox();
+              },
+            ),
+          );
         },
       ),
     );

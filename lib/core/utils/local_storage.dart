@@ -1,3 +1,4 @@
+import 'package:tutor_app/core/constants/storage_keys.dart';
 import 'package:tutor_app/core/constants/strings.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -76,11 +77,9 @@ class GlobalLocalStorage {
 
   Future<bool> clearData() async {
     try {
-      // _storage.remove(GlobalLocalStorageKeys.AUTH_USER);
-      // _storage.remove(GlobalLocalStorageKeys.AUTH_TOKEN);
-      // _storage.remove(GlobalLocalStorageKeys.SEARCH_HISTORY);
-      // _storage.remove(GlobalLocalStorageKeys.VERIFICATION_CHOICE);
-      // _storage.remove(GlobalLocalStorageKeys.USER_LAST_LOCATION);
+      _storage.remove(StorageKeys.AUTH_USER);
+      _storage.remove(StorageKeys.AUTH_TOKEN);
+      _storage.remove(StorageKeys.AUTH_ROLE);
       return true;
     } catch (e) {
       return false;

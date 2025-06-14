@@ -10,10 +10,12 @@ import 'package:tutor_app/core/constants/api_config.dart';
 import 'package:tutor_app/core/routes/app_router.dart';
 import 'package:tutor_app/core/routes/app_routes.dart';
 import 'package:tutor_app/core/utils/local_storage.dart';
+import 'package:tutor_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:tutor_app/features/network/domain/entities/enum.dart';
 import 'package:tutor_app/features/network/presentation/cubit/network_cubit.dart';
 import 'package:tutor_app/features/network/presentation/cubit/network_state.dart';
 
+import '../constants/storage_keys.dart';
 import 'app_logger.dart';
 
 
@@ -189,8 +191,7 @@ class ApiClient {
   }
 
   String _getAuthToken() {
-    // return localStorage.getString(GlobalLocalStorageKeys.AUTH_TOKEN) ?? '';
-    return'';
+    return localStorage.getString(StorageKeys.AUTH_TOKEN) ?? '';
   }
 
   Future<Response> _handleTimeout(
@@ -376,12 +377,12 @@ class ApiClient {
   }
 
   Future<void> logout() async {
-    // String? token = localStorage.getString(GlobalLocalStorageKeys.AUTH_TOKEN);
-//     if (token != null) {
-// AppRouter.rootNavigatorKey.currentContext!
-//           .read<AuthenticationBloc>()
-//           .add(AuthenticationEvent.logout());
-//     }
+    String? token = localStorage.getString(StorageKeys.AUTH_TOKEN);
+    if (token != null) {
+      AppRouter.rootNavigatorKey.currentContext!.read<AuthBloc>().add(
+        AuthEvent.logout(),
+      );
+    }
   }
 }
 

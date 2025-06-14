@@ -4,7 +4,6 @@ import 'package:tutor_app/core/theme/app_color.dart';
 
 class AppTextThemes {
   static TextTheme lightTextTheme = TextTheme(
-    // Headlines
     displayLarge: GoogleFonts.inter(
       fontSize: 32,
       fontWeight: FontWeight.w700,
@@ -24,7 +23,6 @@ class AppTextThemes {
       letterSpacing: -0.2,
     ),
 
-    // Headlines
     headlineLarge: GoogleFonts.inter(
       fontSize: 22,
       fontWeight: FontWeight.w600,
@@ -41,7 +39,6 @@ class AppTextThemes {
       color: AppColors.textPrimaryLight,
     ),
 
-    // Titles
     titleLarge: GoogleFonts.inter(
       fontSize: 16,
       fontWeight: FontWeight.w600,
@@ -58,7 +55,6 @@ class AppTextThemes {
       color: AppColors.textSecondaryLight,
     ),
 
-    // Body Text
     bodyLarge: GoogleFonts.inter(
       fontSize: 16,
       fontWeight: FontWeight.w400,
@@ -78,7 +74,6 @@ class AppTextThemes {
       height: 1.3,
     ),
 
-    // Labels
     labelLarge: GoogleFonts.inter(
       fontSize: 14,
       fontWeight: FontWeight.w500,
@@ -97,7 +92,6 @@ class AppTextThemes {
   );
 
   static TextTheme darkTextTheme = TextTheme(
-    // Headlines
     displayLarge: GoogleFonts.inter(
       fontSize: 32,
       fontWeight: FontWeight.w700,
@@ -117,7 +111,6 @@ class AppTextThemes {
       letterSpacing: -0.2,
     ),
 
-    // Headlines
     headlineLarge: GoogleFonts.inter(
       fontSize: 22,
       fontWeight: FontWeight.w600,
@@ -134,7 +127,6 @@ class AppTextThemes {
       color: AppColors.textPrimaryDark,
     ),
 
-    // Titles
     titleLarge: GoogleFonts.inter(
       fontSize: 16,
       fontWeight: FontWeight.w600,
@@ -151,7 +143,6 @@ class AppTextThemes {
       color: AppColors.textSecondaryDark,
     ),
 
-    // Body Text
     bodyLarge: GoogleFonts.inter(
       fontSize: 16,
       fontWeight: FontWeight.w400,
@@ -171,7 +162,6 @@ class AppTextThemes {
       height: 1.3,
     ),
 
-    // Labels
     labelLarge: GoogleFonts.inter(
       fontSize: 14,
       fontWeight: FontWeight.w500,

@@ -5,13 +5,11 @@ import 'package:tutor_app/core/theme/app_color.dart';
 import 'app_text_theme.dart';
 
 class AppTheme {
-  // Light Theme
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     fontFamily: GoogleFonts.inter().fontFamily,
 
-    // Color Scheme
     colorScheme: const ColorScheme.light(
       primary: AppColors.primaryBlue,
       onPrimary: Colors.white,
@@ -23,10 +21,8 @@ class AppTheme {
       onError: Colors.white,
     ),
 
-    // Text Theme
     textTheme: AppTextThemes.lightTextTheme,
 
-    // App Bar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.surfaceLight,
       foregroundColor: AppColors.textPrimaryLight,
@@ -43,15 +39,13 @@ class AppTheme {
       ),
     ),
 
-    // Card Theme
     cardTheme: CardTheme(
       color: AppColors.cardLight,
       elevation: 2,
-      shadowColor: AppColors.textPrimaryLight.withOpacity(0.1),
+      shadowColor: AppColors.textPrimaryLight.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
 
-    // Elevated Button Theme
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryBlue,
@@ -63,7 +57,6 @@ class AppTheme {
       ),
     ),
 
-    // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.surfaceLight,
@@ -86,7 +79,6 @@ class AppTheme {
       ),
     ),
 
-    // Bottom Navigation Bar Theme
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.surfaceLight,
       selectedItemColor: AppColors.primaryBlue,
@@ -95,20 +87,17 @@ class AppTheme {
       elevation: 8,
     ),
 
-    // Divider Theme
     dividerTheme: const DividerThemeData(
       color: AppColors.dividerLight,
       thickness: 1,
     ),
   );
 
-  // Dark Theme
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     fontFamily: GoogleFonts.inter().fontFamily,
 
-    // Color Scheme
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primaryBlueLight,
       onPrimary: Colors.white,
@@ -116,16 +105,12 @@ class AppTheme {
       onSecondary: Colors.white,
       surface: AppColors.surfaceDark,
       onSurface: AppColors.textPrimaryDark,
-      background: AppColors.backgroundDark,
-      onBackground: AppColors.textPrimaryDark,
       error: AppColors.error,
       onError: Colors.white,
     ),
 
-    // Text Theme
     textTheme: AppTextThemes.darkTextTheme,
 
-    // App Bar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.surfaceDark,
       foregroundColor: AppColors.textPrimaryDark,
@@ -142,15 +127,13 @@ class AppTheme {
       ),
     ),
 
-    // Card Theme
     cardTheme: CardTheme(
       color: AppColors.cardDark,
       elevation: 4,
-      shadowColor: Colors.black.withOpacity(0.3),
+      shadowColor: Colors.black.withValues(alpha: 0.3),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
 
-    // Elevated Button Theme
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryBlueLight,
@@ -162,7 +145,6 @@ class AppTheme {
       ),
     ),
 
-    // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.cardDark,
@@ -188,7 +170,6 @@ class AppTheme {
       ),
     ),
 
-    // Bottom Navigation Bar Theme
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.surfaceDark,
       selectedItemColor: AppColors.primaryBlueLight,
@@ -197,7 +178,6 @@ class AppTheme {
       elevation: 8,
     ),
 
-    // Divider Theme
     dividerTheme: const DividerThemeData(
       color: AppColors.dividerDark,
       thickness: 1,
@@ -205,7 +185,6 @@ class AppTheme {
   );
 }
 
-// Helper Extensions
 extension AppTextStyleExtensions on TextTheme {
   TextStyle get buttonText =>
       GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500);

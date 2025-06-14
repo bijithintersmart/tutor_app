@@ -5,6 +5,7 @@ import 'package:tutor_app/core/db/supabase_client.dart';
 import 'package:tutor_app/core/utils/network_utils.dart';
 import 'package:tutor_app/features/auth/presentation/pages/signup_screen.dart';
 import 'package:tutor_app/features/network/presentation/cubit/network_cubit.dart';
+import 'package:tutor_app/features/settings/presentation/pages/settings.dart';
 import 'package:tutor_app/features/student/presentation/pages/student_home.dart';
 
 import '../../features/features.dart';
@@ -102,6 +103,11 @@ class AppRouter {
         path: AppRoutes.splash,
         name: 'splash',
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        name: 'settings',
+        builder: (context, state) => const SettingsPage(),
       ),
     ],
     errorBuilder: (context, state) => ErrorScreen(error: state.error),

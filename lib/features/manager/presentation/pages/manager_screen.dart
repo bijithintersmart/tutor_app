@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tutor_app/core/db/supabase_client.dart';
+import 'package:tutor_app/core/utils/app_logger.dart';
 import 'package:tutor_app/features/manager/presentation/pages/manager_leave_request_screen.dart';
 import 'package:tutor_app/features/manager/presentation/widgets/booking_screen.dart';
 import 'package:tutor_app/features/manager/presentation/widgets/manager_home.dart';
@@ -29,6 +30,17 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
   void initState() {
     super.initState();
     _teachers = MockDataService.getTeachers();
+    // getTeacher();
+  }
+
+  void getTeacher() {
+    try {
+      supabaseClient.queryTable(tableName: 'users').then((value) {
+        AppLogger.logInfo("value :$value");
+      });
+    } catch (e) {
+      AppLogger.logError(e);
+    }
   }
 
   List<String> _getAllSubjects() {
@@ -78,7 +90,7 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-     ManagerHome(),
+      ManagerHome(),
       BookingScreen(),
       StudentAssignment(
         allSubjects: _getAllSubjects(),
@@ -94,7 +106,7 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
       ProfileSection(
         onEditProfile: () {
           ScaffoldMessenger.of(context).showSnackBar(
-             SnackBar(
+            SnackBar(
               content: Text('Edit profile not implemented'),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -134,5 +146,4 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
       ),
     );
   }
-
 }

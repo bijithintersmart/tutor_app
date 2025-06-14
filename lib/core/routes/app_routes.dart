@@ -24,5 +24,6 @@ class AppRoutes {
   //utils
   static const networkError = '/networkError';
   static const apiTimeOut = '/apiTimeout';
+  static const settings = '/settings';
 
 }

@@ -1,16 +1,23 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:tutor_app/core/constants/storage_keys.dart';
 import 'package:tutor_app/core/routes/app_router.dart';
 import 'package:tutor_app/core/utils/app_logger.dart';
 import 'package:tutor_app/core/utils/app_messenger.dart';
+import 'package:tutor_app/core/utils/local_storage.dart';
 import 'package:tutor_app/features/auth/data/models/user.dart';
 
 class SupabaseClientService {
+  factory SupabaseClientService() => _instance;
+
+  SupabaseClientService._internal();
+
+  final localStorage = GlobalLocalStorage();
+
   static final SupabaseClientService _instance =
       SupabaseClientService._internal();
-  factory SupabaseClientService() => _instance;
-  SupabaseClientService._internal();
 
   SupabaseClient get client => Supabase.instance.client;
 
@@ -35,6 +42,30 @@ class SupabaseClientService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> queryTable({
+    required String tableName,
+    Map<String, dynamic>? filters,
+    List<String>? selectFields,
+    bool single = false,
+  }) async {
+    try {
+      var query = client.from(tableName).select(selectFields?.join(',') ?? '*');
+      filters?.forEach((key, value) {
+        query = query.eq(key, value);
+      });
+      final result = single ? await query.single() : await query;
+      if (single) {
+        return [result as Map<String, dynamic>];
+      } else if (result is List) {
+        return result.whereType<Map<String, dynamic>>().map((e) => e).toList();
+      } else {
+        throw Exception('Unexpected result type: ${result.runtimeType}');
+      }
+    } catch (e) {
+      throw Exception('Failed to query $tableName: $e');
+    }
+  }
+
   Future<AuthResponse> signIn(String email, String password) async {
     try {
       final response = await client.auth.signInWithPassword(
@@ -46,6 +77,7 @@ class SupabaseClientService {
       }
       AppLogger.logInfo("User: ${response.user?.toJson()}");
       AppLogger.logInfo("Session: ${response.session?.toJson()}");
+      _saveUserData(response);
       return response;
     } on AuthException catch (e) {
       _handleError('Login failed', e.message);
@@ -88,7 +120,7 @@ class SupabaseClientService {
         'display_name': displayName,
         'profile_image': _generateLetterProfileImage(initials),
       });
-
+      _saveUserData(response);
       return response;
     } on AuthException catch (e) {
       _handleError('Sign up failed', e.message);
@@ -148,7 +180,9 @@ class SupabaseClientService {
   bool hasRole(UserType role) => currentUserType == role;
 
   bool get isManager => hasRole(UserType.manager);
+
   bool get isTeacher => hasRole(UserType.teacher);
+
   bool get isStudent => hasRole(UserType.student);
 
   Future<Map<String, dynamic>?> getUserProfile() async {
@@ -180,15 +214,6 @@ class SupabaseClientService {
     }
   }
 
-  String _generateLetterProfileImage(String initials) {
-    return 'https://ui-avatars.com/api/?name=$initials&background=0D8ABC&color=fff&size=256';
-  }
-
-  String _getInitialsFromEmail(String email) {
-    final namePart = email.split('@').first;
-    return namePart.isNotEmpty ? namePart[0].toUpperCase() : 'U';
-  }
-
   static Future<void> initialize({
     required String url,
     required String anonKey,
@@ -199,6 +224,30 @@ class SupabaseClientService {
       authOptions: const FlutterAuthClientOptions(
         authFlowType: AuthFlowType.pkce,
       ),
+    );
+  }
+
+  String _generateLetterProfileImage(String initials) {
+    return 'https://ui-avatars.com/api/?name=$initials&background=0D8ABC&color=fff&size=256';
+  }
+
+  String _getInitialsFromEmail(String email) {
+    final namePart = email.split('@').first;
+    return namePart.isNotEmpty ? namePart[0].toUpperCase() : 'U';
+  }
+
+  void _saveUserData(AuthResponse response) {
+    localStorage.setString(
+      StorageKeys.AUTH_USER,
+      jsonEncode(response.user?.toJson()),
+    );
+    localStorage.setString(
+      StorageKeys.AUTH_TOKEN,
+      jsonEncode(response.session?.accessToken ?? ''),
+    );
+    localStorage.setString(
+      StorageKeys.AUTH_ROLE,
+      jsonEncode(response.user?.toJson()),
     );
   }
 

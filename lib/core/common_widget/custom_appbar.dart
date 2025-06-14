@@ -133,14 +133,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: GestureDetector(
             onTap: () => _showProfileDialog(context),
-            child: CircleAvatar(
-              radius: 18,
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              child: Text(
-                initials,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.bold,
+            child: Material(
+              elevation: 3,
+              shape: CircleBorder(),
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                child: Text(
+                  initials,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
